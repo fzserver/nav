@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:navneet/cubit/posts_cubit.dart';
+import 'package:navneet/cubit/login_cubit.dart';
+import 'package:navneet/data/loginRepo.dart';
 import 'package:navneet/pages/home/home.dart';
 
 class MyApp extends StatelessWidget {
@@ -14,8 +15,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BlocProvider<PostsCubit>(
-        create: (context) => PostsCubit()..getPosts(),
+      home: BlocProvider<LoginCubit>(
+        create: (context) => LoginCubit(LoginRepo()),
         child: HomePage(),
       ),
     );
