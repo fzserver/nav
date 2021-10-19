@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:navneet/data/loginRepo.dart';
 import 'package:navneet/data/model/login.dart';
-import 'package:navneet/services/networkRequest.dart';
 import 'package:navneet/utils/methodUtils.dart';
 
 part 'login_state.dart';
@@ -25,12 +24,10 @@ class LoginCubit extends Cubit<LoginState> {
       } else if (password == "") {
         emit(LoginError("Enter your Password"));
       } else if (await MethodUtils.isInternetPresent()) {
-        // await [Permission.phone].request();
-
-        String loginModel =
-            await loginRepo.fetchlogin(email: email, password: password);
-
-        print(loginModel.toString());
+        emit(LoginLoading());
+        loginRepo.validatingLogin(email, password).then((val) {
+          emit(LoginLoaded(loginModel: val));
+        });
       } else {}
       emit(LoginError("No Internet"));
     } catch (e) {

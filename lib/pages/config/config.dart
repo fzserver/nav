@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:navneet/cubit/login_cubit.dart';
 import 'package:navneet/data/loginRepo.dart';
 import 'package:navneet/pages/home/home.dart';
+import 'package:navneet/services/data_service.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -16,8 +17,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: BlocProvider<LoginCubit>(
-        create: (context) => LoginCubit(LoginRepo()),
-        child: HomePage(),
+        create: (context) => LoginCubit(
+          LoginRepo(
+            networkService: NetworkService(),
+          ),
+        ),
+        child: const HomePage(),
       ),
     );
   }

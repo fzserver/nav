@@ -1,21 +1,18 @@
-import 'package:navneet/data/model/login.dart';
+// ignore_for_file: file_names
+import 'package:navneet/services/data_service.dart';
 
-abstract class LoginRepository {
-  /// Throws [NetworkException]
-  Future<String> fetchlogin({required String email, required String password});
-}
+import 'model/login.dart';
 
-class LoginRepo implements LoginRepository {
-  @override
-  Future<String> fetchlogin({required String email, required String password}) {
-    return Future.delayed(Duration(seconds: 1), () {
-      if (email == '') {
-        throw NetworkException();
-      }
+class LoginRepo {
+  final NetworkService networkService;
 
-      return email;
-    });
+  LoginRepo({required this.networkService});
+
+  Future<LoginModel> validatingLogin(String email, String password) async {
+    final todoObj = {"userEmail": email, "password": password};
+
+    final loginRes = await networkService.validateLogin(todoObj);
+
+    return loginRes;
   }
 }
-
-class NetworkException implements Exception {}

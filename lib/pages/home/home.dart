@@ -22,53 +22,73 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Login'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              controller: email,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: "Email",
-                alignLabelWithHint: true,
-                prefixIcon: Icon(Icons.person),
-                labelStyle:
-                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
+      body: BlocBuilder<LoginCubit, LoginState>(
+        builder: (context, state) {
+          if (state is LoginLoading) {
+            return Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(Colors.pink),
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              controller: password,
-              inputFormatters: [LengthLimitingTextInputFormatter(6)],
-              decoration: InputDecoration(
-                labelText: "Password",
-                alignLabelWithHint: true,
-                prefixIcon: Icon(Icons.person),
-                labelStyle:
-                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
+            );
+          }
+
+          if (state is LoginLoaded) {
+            final data = (state).loginModel;
+            return Center(
+              child: Text(
+                data.data!.loginInfo!.mobile!,
               ),
+            );
+          }
+
+          return SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  controller: email,
+                  decoration: InputDecoration(
+                    labelText: "Email",
+                    alignLabelWithHint: true,
+                    prefixIcon: Icon(Icons.person),
+                    labelStyle: TextStyle(
+                        fontSize: 16.0, fontWeight: FontWeight.normal),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  controller: password,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: "Password",
+                    alignLabelWithHint: true,
+                    prefixIcon: Icon(Icons.person),
+                    labelStyle: TextStyle(
+                        fontSize: 16.0, fontWeight: FontWeight.normal),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                MaterialButton(
+                  onPressed: () {
+                    BlocProvider.of<LoginCubit>(context).validateLogin(
+                        email: email.text,
+                        password: password.text,
+                        context: context);
+                  },
+                  child: Text('Login'),
+                  color: Colors.pink,
+                  textColor: Colors.white,
+                ),
+              ],
             ),
-            SizedBox(
-              height: 10,
-            ),
-            MaterialButton(
-              onPressed: () {
-                BlocProvider.of<LoginCubit>(context).validateLogin(
-                    email: email.text,
-                    password: password.text,
-                    context: context);
-              },
-              child: Text('Login'),
-              color: Colors.pink,
-              textColor: Colors.white,
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

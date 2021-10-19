@@ -13,6 +13,11 @@ class LoginLoading extends LoginState {
   const LoginLoading();
 }
 
+class LoginLoaded extends LoginState {
+  final LoginModel loginModel;
+  const LoginLoaded({required this.loginModel});
+}
+
 class LoginError extends LoginState {
   final String message;
   const LoginError(this.message);
